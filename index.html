@@ -21,6 +21,7 @@
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
+            --delta: #2d5016; /* 三角洲军绿色 */
         }
         
         body {
@@ -43,6 +44,44 @@
             background-size: 50px 50px;
             pointer-events: none;
             z-index: 0;
+        }
+        
+        /* 三角洲装饰元素 */
+        .delta-decoration {
+            position: fixed;
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 0;
+            font-size: 200px;
+            user-select: none;
+        }
+        .delta-dec-1 { top: 10%; left: 5%; transform: rotate(-15deg); }
+        .delta-dec-2 { bottom: 10%; right: 5%; transform: rotate(15deg); }
+        .delta-dec-3 { top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg); font-size: 400px; }
+        
+        /* 战术角标 */
+        .tactical-corner {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--accent);
+        }
+        .tactical-corner.tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+        .tactical-corner.tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+        .tactical-corner.bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+        .tactical-corner.br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+        
+        /* 迷彩装饰条 */
+        .camo-stripe {
+            height: 4px;
+            background: linear-gradient(90deg, 
+                var(--delta) 0%, 
+                var(--dark) 20%, 
+                var(--accent) 50%, 
+                var(--dark) 80%, 
+                var(--delta) 100%);
+            margin: 20px 0;
+            border-radius: 2px;
         }
         
         .container {
@@ -110,7 +149,7 @@
         }
         
         .report-card {
-            background: linear-gradient(135deg, rgba(74, 111, 165, 0.15) 0%, rgba(255, 149, 0, 0.08) 100%);
+            background: linear-gradient(135deg, rgba(45, 80, 22, 0.2) 0%, rgba(74, 111, 165, 0.1) 100%);
             border: 1px solid rgba(74, 111, 165, 0.3);
             border-radius: 15px;
             padding: 25px;
@@ -119,12 +158,28 @@
             text-decoration: none;
             color: var(--light);
             display: block;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .report-card::before {
+            content: '🎯';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 100px;
+            opacity: 0.05;
+            transform: rotate(15deg);
         }
         
         .report-card:hover {
             transform: translateY(-3px);
             border-color: var(--accent);
             box-shadow: 0 10px 30px rgba(255, 149, 0, 0.15);
+        }
+        
+        .report-card.new {
+            border-left: 4px solid var(--success);
         }
         
         .report-card.new {
@@ -240,13 +295,24 @@
 <body>
     <div class="bg-grid"></div>
     
+    <!-- 三角洲装饰元素 -->
+    <div class="delta-decoration delta-dec-1">🎯</div>
+    <div class="delta-decoration delta-dec-2">🎯</div>
+    <div class="delta-decoration delta-dec-3">⚔️</div>
+    
     <div class="container">
         <!-- 头部 -->
-        <div class="header">
+        <div class="header" style="position: relative;">
+            <div class="tactical-corner tl"></div>
+            <div class="tactical-corner tr"></div>
+            <div class="tactical-corner bl"></div>
+            <div class="tactical-corner br"></div>
+            
             <div class="logo">🎮 三角洲护航俱乐部</div>
             <div class="subtitle">Delta Escort Club · 报告中心</div>
             <div class="tagline">专业护航 · 安心上分</div>
-            <div style="margin-top: 20px; color: var(--muted); font-size: 0.9em;">
+            <div class="camo-stripe" style="max-width: 200px; margin: 20px auto;"></div>
+            <div style="margin-top: 15px; color: var(--muted); font-size: 0.9em;">
                 任务编号：JJC-20260409-001 | 中书省制定
             </div>
         </div>
@@ -256,10 +322,10 @@
             <h2>📚 报告列表</h2>
             
             <div class="report-list">
-                <!-- 报告 1: 小红书运营规划 -->
-                <a href="report-01-xiaohongshu.html" class="report-card new">
+                <!-- 报告 1: 运营规划 -->
+                <a href="report-01-plan.html" class="report-card new">
                     <div class="report-header">
-                        <div class="report-title">📱 小红书运营规划报告</div>
+                        <div class="report-title">📋 运营规划报告</div>
                         <span class="report-badge badge-new">最新发布</span>
                     </div>
                     <div class="report-meta">
@@ -269,7 +335,7 @@
                         </div>
                         <div class="report-meta-item">
                             <span>📊</span>
-                            <span>完整调研</span>
+                            <span>运营方案</span>
                         </div>
                         <div class="report-meta-item">
                             <span>📝</span>
@@ -277,15 +343,46 @@
                         </div>
                     </div>
                     <div class="report-desc">
-                        小红书平台完整运营规划方案，包含账号定位、内容策略、爆款公式、定价策略、风险控制等。
-                        基于实地调研 5 个关键词、分析 10+ 爆款案例，总结可复制的运营方法论。
+                        小红书平台完整运营规划方案，包含账号定位、内容策略、定价策略、获客引流、风险控制等。
                     </div>
                     <div class="report-tags">
-                        <span class="tag">#小红书运营</span>
+                        <span class="tag">#运营规划</span>
+                        <span class="tag">#账号定位</span>
+                        <span class="tag">#内容策略</span>
+                        <span class="tag">#定价策略</span>
+                        <span class="tag">#风险控制</span>
+                    </div>
+                </a>
+                
+                <!-- 报告 2: 爆款分析 -->
+                <a href="report-02-analysis.html" class="report-card new">
+                    <div class="report-header">
+                        <div class="report-title">🔥 爆款分析报告</div>
+                        <span class="report-badge badge-new">最新发布</span>
+                    </div>
+                    <div class="report-meta">
+                        <div class="report-meta-item">
+                            <span>📅</span>
+                            <span>2026-04-09</span>
+                        </div>
+                        <div class="report-meta-item">
+                            <span>📊</span>
+                            <span>实地调研</span>
+                        </div>
+                        <div class="report-meta-item">
+                            <span>📝</span>
+                            <span>中书省</span>
+                        </div>
+                    </div>
+                    <div class="report-desc">
+                        基于小红书实地调研，分析 5 个关键词、10+ 爆款案例，总结爆款标题公式、封面风格、内容结构、引流话术等。
+                    </div>
+                    <div class="report-tags">
                         <span class="tag">#爆款公式</span>
                         <span class="tag">#实地调研</span>
-                        <span class="tag">#内容策略</span>
-                        <span class="tag">#风险控制</span>
+                        <span class="tag">#标题公式</span>
+                        <span class="tag">#封面分析</span>
+                        <span class="tag">#引流话术</span>
                     </div>
                 </a>
             </div>
