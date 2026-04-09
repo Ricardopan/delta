@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三角洲护航俱乐部 · 报告中心</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #4a6fa5;
+            --accent: #ff9500;
+            --dark: #0a0e1a;
+            --darker: #05070c;
+            --light: #e0e6ed;
+            --muted: #6b7280;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 50%, #1a1f2e 100%);
+            min-height: 100vh;
+            color: var(--light);
+            line-height: 1.6;
+        }
+        
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(74, 111, 165, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(74, 111, 165, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, rgba(74, 111, 165, 0.1) 0%, rgba(255, 149, 0, 0.05) 100%);
+            border: 1px solid rgba(74, 111, 165, 0.3);
+            border-radius: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .logo {
+            font-size: 3em;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent) 0%, #ffb347 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.3em;
+            color: var(--muted);
+        }
+        
+        .tagline {
+            display: inline-block;
+            padding: 8px 24px;
+            background: rgba(255, 149, 0, 0.1);
+            border: 1px solid var(--accent);
+            border-radius: 50px;
+            color: var(--accent);
+            font-weight: 600;
+            margin-top: 15px;
+        }
+        
+        .section {
+            background: rgba(10, 14, 26, 0.6);
+            border: 1px solid rgba(74, 111, 165, 0.2);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .section h2 {
+            color: var(--accent);
+            font-size: 1.6em;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(74, 111, 165, 0.3);
+        }
+        
+        .report-list {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .report-card {
+            background: linear-gradient(135deg, rgba(74, 111, 165, 0.15) 0%, rgba(255, 149, 0, 0.08) 100%);
+            border: 1px solid rgba(74, 111, 165, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--light);
+            display: block;
+        }
+        
+        .report-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(255, 149, 0, 0.15);
+        }
+        
+        .report-card.new {
+            border-left: 4px solid var(--success);
+        }
+        
+        .report-card.coming-soon {
+            opacity: 0.6;
+            border-left: 4px solid var(--muted);
+        }
+        
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .report-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: var(--light);
+        }
+        
+        .report-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .badge-new {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+        
+        .badge-soon {
+            background: rgba(107, 114, 128, 0.2);
+            color: var(--muted);
+        }
+        
+        .report-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .report-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        
+        .report-desc {
+            color: var(--muted);
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        
+        .report-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .tag {
+            padding: 4px 10px;
+            background: rgba(74, 111, 165, 0.2);
+            border-radius: 15px;
+            font-size: 0.85em;
+            color: var(--primary);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--muted);
+            border-top: 1px solid rgba(74, 111, 165, 0.2);
+            margin-top: 40px;
+        }
+        
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-item {
+            background: rgba(74, 111, 165, 0.1);
+            border: 1px solid rgba(74, 111, 165, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: 900;
+            color: var(--accent);
+        }
+        
+        .stat-label {
+            color: var(--muted);
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <div class="logo">🎮 三角洲护航俱乐部</div>
+            <div class="subtitle">Delta Escort Club · 报告中心</div>
+            <div class="tagline">专业护航 · 安心上分</div>
+            <div style="margin-top: 20px; color: var(--muted); font-size: 0.9em;">
+                任务编号：JJC-20260409-001 | 中书省制定
+            </div>
+        </div>
+        
+        <!-- 统计栏 -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number">1</div>
+                <div class="stat-label">已发布报告</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">3</div>
+                <div class="stat-label">筹备中报告</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">4</div>
+                <div class="stat-label">总计报告</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">2026</div>
+                <div class="stat-label">最后更新</div>
+            </div>
+        </div>
+        
+        <!-- 报告列表 -->
+        <div class="section">
+            <h2>📚 报告列表</h2>
+            
+            <div class="report-list">
+                <!-- 报告 1: 小红书运营规划 -->
+                <a href="report-01-xiaohongshu.html" class="report-card new">
+                    <div class="report-header">
+                        <div class="report-title">📱 小红书运营规划报告</div>
+                        <span class="report-badge badge-new">最新发布</span>
+                    </div>
+                    <div class="report-meta">
+                        <div class="report-meta-item">
+                            <span>📅</span>
+                            <span>2026-04-09</span>
+                        </div>
+                        <div class="report-meta-item">
+                            <span>📊</span>
+                            <span>完整调研</span>
+                        </div>
+                        <div class="report-meta-item">
+                            <span>📝</span>
+                            <span>中书省</span>
+                        </div>
+                    </div>
+                    <div class="report-desc">
+                        小红书平台完整运营规划方案，包含账号定位、内容策略、爆款公式、定价策略、风险控制等。
+                        基于实地调研 5 个关键词、分析 10+ 爆款案例，总结可复制的运营方法论。
+                    </div>
+                    <div class="report-tags">
+                        <span class="tag">#小红书运营</span>
+                        <span class="tag">#爆款公式</span>
+                        <span class="tag">#实地调研</span>
+                        <span class="tag">#内容策略</span>
+                        <span class="tag">#风险控制</span>
+                    </div>
+                </a>
+                
+                <!-- 报告 2: 竞品分析 -->
+                <div class="report-card coming-soon">
+                    <div class="report-header">
+                        <div class="report-title">🎯 竞品分析报告</div>
+                        <span class="report-badge badge-soon">筹备中</span>
+                    </div>
+                    <div class="report-meta">
+                        <div class="report-meta-item">
+                            <span>📅</span>
+                            <span>敬请期待</span>
+                        </div>
+                        <div class="report-meta-item">
+                            <span>📊</span>
+                            <span>竞品调研</span>
+                        </div>
+                    </div>
+                    <div class="report-desc">
+                        三角洲护航赛道竞品分析，包含主要竞争对手分析、价格对比、优劣势分析、差异化定位建议。
+                    </div>
+                    <div class="report-tags">
+                        <span class="tag">#竞品分析</span>
+                        <span class="tag">#市场调研</span>
+                        <span class="tag">#差异化</span>
+                    </div>
+                </div>
+                
+                <!-- 报告 3: 财务预测 -->
+                <div class="report-card coming-soon">
+                    <div class="report-header">
+                        <div class="report-title">💰 财务预测报告</div>
+                        <span class="report-badge badge-soon">筹备中</span>
+                    </div>
+                    <div class="report-meta">
+                        <div class="report-meta-item">
+                            <span>📅</span>
+                            <span>敬请期待</span>
+                        </div>
+                        <div class="report-meta-item">
+                            <span>📊</span>
+                            <span>财务模型</span>
+                        </div>
+                    </div>
+                    <div class="report-desc">
+                        3 个月财务预测模型，包含收入预测、成本分析、盈亏平衡点、现金流预测、投资回报分析。
+                    </div>
+                    <div class="report-tags">
+                        <span class="tag">#财务预测</span>
+                        <span class="tag">#成本分析</span>
+                        <span class="tag">#ROI</span>
+                    </div>
+                </div>
+                
+                <!-- 报告 4: 执行 SOP -->
+                <div class="report-card coming-soon">
+                    <div class="report-header">
+                        <div class="report-title">⚙️ 执行 SOP 手册</div>
+                        <span class="report-badge badge-soon">筹备中</span>
+                    </div>
+                    <div class="report-meta">
+                        <div class="report-meta-item">
+                            <span>📅</span>
+                            <span>敬请期待</span>
+                        </div>
+                        <div class="report-meta-item">
+                            <span>📊</span>
+                            <span>操作手册</span>
+                        </div>
+                    </div>
+                    <div class="report-desc">
+                        标准化执行流程手册，包含日常运营 SOP、内容发布流程、客户接待流程、问题处理流程。
+                    </div>
+                    <div class="report-tags">
+                        <span class="tag">#SOP</span>
+                        <span class="tag">#标准化</span>
+                        <span class="tag">#执行流程</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部 -->
+        <div class="footer">
+            <div class="logo" style="font-size: 1.5em;">🎮 三角洲护航俱乐部</div>
+            <div style="margin-top: 10px; font-size: 0.9em;">
+                本方案由 AI 助理生成 | 任务编号：JJC-20260409-001
+            </div>
+            <div style="margin-top: 5px; font-size: 0.9em;">
+                制定部门：中书省 | 技术支持：OpenClaw
+            </div>
+            <div class="tagline" style="margin-top: 20px;">专业护航 · 安心上分</div>
+        </div>
+    </div>
+</body>
+</html>
