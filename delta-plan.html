@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三角洲护航俱乐部 · 运营规划方案</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #4a6fa5;
+            --accent: #ff9500;
+            --dark: #0a0e1a;
+            --darker: #05070c;
+            --light: #e0e6ed;
+            --muted: #6b7280;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 50%, #1a1f2e 100%);
+            min-height: 100vh;
+            color: var(--light);
+            line-height: 1.6;
+        }
+        
+        /* 军事网格背景 */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(74, 111, 165, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(74, 111, 165, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* 战术装饰元素 */
+        .tactical-corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--accent);
+        }
+        .tactical-corner.tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+        .tactical-corner.tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+        .tactical-corner.bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+        .tactical-corner.br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* 头部 */
+        .header {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, rgba(74, 111, 165, 0.1) 0%, rgba(255, 149, 0, 0.05) 100%);
+            border: 1px solid rgba(74, 111, 165, 0.3);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(74, 111, 165, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .logo {
+            font-size: 3em;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent) 0%, #ffb347 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(255, 149, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.3em;
+            color: var(--muted);
+            margin-bottom: 20px;
+        }
+        
+        .tagline {
+            display: inline-block;
+            padding: 8px 24px;
+            background: rgba(255, 149, 0, 0.1);
+            border: 1px solid var(--accent);
+            border-radius: 50px;
+            color: var(--accent);
+            font-weight: 600;
+            margin-top: 15px;
+        }
+        
+        /* 任务信息卡片 */
+        .mission-card {
+            background: rgba(10, 14, 26, 0.8);
+            border: 1px solid rgba(74, 111, 165, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .mission-card h2 {
+            color: var(--accent);
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .mission-card h2::before {
+            content: '🎯';
+            font-size: 1.2em;
+        }
+        
+        /* 内容区块 */
+        .section {
+            background: rgba(10, 14, 26, 0.6);
+            border: 1px solid rgba(74, 111, 165, 0.2);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .section h3 {
+            color: var(--primary);
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(74, 111, 165, 0.3);
+        }
+        
+        /* 数据卡片网格 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, rgba(74, 111, 165, 0.2) 0%, rgba(255, 149, 0, 0.1) 100%);
+            border: 1px solid rgba(74, 111, 165, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: 900;
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: var(--muted);
+            font-size: 0.95em;
+        }
+        
+        /* 表格样式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(5, 7, 12, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(74, 111, 165, 0.2);
+        }
+        
+        th {
+            background: rgba(74, 111, 165, 0.2);
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: rgba(74, 111, 165, 0.1);
+        }
+        
+        /* 列表样式 */
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        ul li {
+            padding: 10px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        ul li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+        
+        /* 重点突出 */
+        .highlight {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .success {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        /* 底部 */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--muted);
+            border-top: 1px solid rgba(74, 111, 165, 0.2);
+            margin-top: 40px;
+        }
+        
+        .footer-info {
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2em;
+            }
+            
+            .header {
+                padding: 40px 15px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+        }
+        
+        /* 加载动画 */
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: var(--muted);
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(74, 111, 165, 0.3);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* 代码块 */
+        code {
+            background: rgba(5, 7, 12, 0.8);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: var(--accent);
+        }
+        
+        pre {
+            background: rgba(5, 7, 12, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 20px 0;
+            border: 1px solid rgba(74, 111, 165, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <div class="header-content">
+                <div class="logo">🎮 三角洲护航俱乐部</div>
+                <div class="subtitle">Delta Escort Club</div>
+                <div class="tagline">专业护航 · 安心上分</div>
+                <div class="footer-info" style="margin-top: 20px; color: var(--muted);">
+                    任务编号：JJC-20260409-001 | 制定日期：2026-04-09
+                </div>
+            </div>
+            <div class="tactical-corner tl"></div>
+            <div class="tactical-corner tr"></div>
+            <div class="tactical-corner bl"></div>
+            <div class="tactical-corner br"></div>
+        </div>
+        
+        <!-- 任务概览 -->
+        <div class="mission-card">
+            <h2>任务概览</h2>
+            <p><strong>任务目标：</strong>在小红书平台运营"三角洲护航俱乐部"账号，承接游戏护航订单</p>
+            <p><strong>目标用户：</strong>18-35 岁男性游戏玩家，段位焦虑者，时间少想快速上分的上班族</p>
+            <p><strong>核心定位：</strong>专业护航服务提供商，"护航队长阿杰"人设</p>
+        </div>
+        
+        <!-- 预期目标 -->
+        <div class="section">
+            <h3>📊 预期目标</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">3000+</div>
+                    <div class="stat-label">30 天粉丝数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">30-50</div>
+                    <div class="stat-label">30 天成交单数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">10000+</div>
+                    <div class="stat-label">90 天粉丝数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3-5 万</div>
+                    <div class="stat-label">90 天月营收</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 账号定位 -->
+        <div class="section">
+            <h3>🎯 账号定位与人设</h3>
+            <table>
+                <tr>
+                    <th>项目</th>
+                    <th>内容</th>
+                </tr>
+                <tr>
+                    <td>账号名称</td>
+                    <td>三角洲护航俱乐部</td>
+                </tr>
+                <tr>
+                    <td>Slogan</td>
+                    <td>"专业护航，安心上分"</td>
+                </tr>
+                <tr>
+                    <td>人设</td>
+                    <td>"护航队长阿杰"——5 年 FPS 老玩家，前职业青训，说话直爽靠谱</td>
+                </tr>
+                <tr>
+                    <td>视觉风格</td>
+                    <td>军事风 + 专业感，主色调黑金/军绿</td>
+                </tr>
+                <tr>
+                    <td>内容调性</td>
+                    <td>专业但不高冷，用玩家语言说话，适度玩梗</td>
+                </tr>
+            </table>
+        </div>
+        
+        <!-- 内容策略 -->
+        <div class="section">
+            <h3>📝 内容策略</h3>
+            <table>
+                <tr>
+                    <th>内容类型</th>
+                    <th>占比</th>
+                    <th>示例选题</th>
+                </tr>
+                <tr>
+                    <td>干货教学</td>
+                    <td>40%</td>
+                    <td>"三角洲单排上分技巧"、"地图点位详解"</td>
+                </tr>
+                <tr>
+                    <td>护航案例</td>
+                    <td>30%</td>
+                    <td>"客户从白银到黄金实录"、"逆风局翻盘集锦"</td>
+                </tr>
+                <tr>
+                    <td>人设日常</td>
+                    <td>20%</td>
+                    <td>"护航队长的日常"、"玩家故事"</td>
+                </tr>
+                <tr>
+                    <td>引流福利</td>
+                    <td>10%</td>
+                    <td>"免费试打名额"、"粉丝专属折扣"</td>
+                </tr>
+            </table>
+            
+            <div class="success" style="margin-top: 20px;">
+                <strong>📌 发布计划：</strong>日更 1 篇，黄金时段 18:00-22:00 | 图文为主 (70%) + 短视频 (30%)
+            </div>
+        </div>
+        
+        <!-- 爆款公式 -->
+        <div class="section">
+            <h3>🔥 爆款内容公式（实地调研总结）</h3>
+            
+            <h4 style="color: var(--accent); margin: 20px 0 10px;">爆款标题公式</h4>
+            <ul>
+                <li><strong>争议提问型：</strong>"明明知道 X 为什么还 Y？"</li>
+                <li><strong>情绪宣泄型：</strong>"没本事别当 X 行吗"</li>
+                <li><strong>避坑警示型：</strong>"亲历骗局，X 套路，比 Y 还刺激"</li>
+                <li><strong>创业分享型：</strong>"开的 X 店，简单聊一聊"</li>
+                <li><strong>风口分析型：</strong>"下一个风口就是 X"</li>
+                <li><strong>低价引流型：</strong>"有没有 Xr/h 的 Y？"</li>
+                <li><strong>人设争议型：</strong>"虽然我是 X 但是我 Y"</li>
+            </ul>
+            
+            <h4 style="color: var(--accent); margin: 20px 0 10px;">封面风格</h4>
+            <ul>
+                <li><strong>价格表截图型 (40%)：</strong>黑底绿字表格，清晰列出价格服务</li>
+                <li><strong>游戏战绩截图型 (25%)：</strong>段位展示、KD 比、胜率数据</li>
+                <li><strong>文字卡片型 (20%)：</strong>纯色背景 + 大字标题 + emoji</li>
+                <li><strong>工作室实景型 (10%)：</strong>多人电脑工位照片</li>
+                <li><strong>聊天记录截图型 (5%)：</strong>客户好评、转账记录</li>
+            </ul>
+            
+            <h4 style="color: var(--accent); margin: 20px 0 10px;">可复制爆款公式</h4>
+            <ul>
+                <li><strong>价格表爆款：</strong>黑底绿字封面 + 价格服务说明</li>
+                <li><strong>避坑引流爆款：</strong>聊天记录封面 + 被骗经历 + 推荐自己</li>
+                <li><strong>创业招商爆款：</strong>工作室实景 + 收益截图 + 招募</li>
+                <li><strong>争议人设爆款：</strong>大字报封面 + 观点表达 + 引发讨论</li>
+                <li><strong>低价引流爆款：</strong>低价突出 + 限制说明 + 引导私聊</li>
+            </ul>
+        </div>
+        
+        <!-- 定价策略 -->
+        <div class="section">
+            <h3>💰 定价策略</h3>
+            <table>
+                <tr>
+                    <th>服务类型</th>
+                    <th>价格区间</th>
+                    <th>说明</th>
+                </tr>
+                <tr>
+                    <td>体验单</td>
+                    <td class="highlight">39-59 元</td>
+                    <td>1 小时试打，转化主力</td>
+                </tr>
+                <tr>
+                    <td>段位护航</td>
+                    <td class="highlight">199-499 元</td>
+                    <td>青铜→黄金等包段服务</td>
+                </tr>
+                <tr>
+                    <td>包周/包月</td>
+                    <td class="highlight">899-2999 元</td>
+                    <td>长期客户优惠</td>
+                </tr>
+                <tr>
+                    <td>专属陪玩</td>
+                    <td class="highlight">50-100 元/小时</td>
+                    <td>指定打手，1 对 1</td>
+                </tr>
+            </table>
+            
+            <div class="success" style="margin-top: 20px;">
+                <strong>🎁 促销策略：</strong>首单 8 折 | 充值满赠 (充 500 送 50) | 老客推荐返现 (10%-15%)
+            </div>
+        </div>
+        
+        <!-- 获客引流 -->
+        <div class="section">
+            <h3>📢 获客引流方式</h3>
+            
+            <h4 style="color: var(--primary); margin: 15px 0 10px;">站内引流</h4>
+            <ul>
+                <li><strong>SEO 优化：</strong>标题含"三角洲护航"、"三角洲陪玩"等高搜索词</li>
+                <li><strong>评论区运营：</strong>主动回复咨询，引导私信</li>
+                <li><strong>薯条投放：</strong>测试爆款笔记，ROI&gt;1:3 时加大投放</li>
+                <li><strong>矩阵号：</strong>3-5 个小号互动造势</li>
+            </ul>
+            
+            <h4 style="color: var(--primary); margin: 15px 0 10px;">站外引流</h4>
+            <ul>
+                <li><strong>抖音/快手：</strong>同步高光操作视频，引流至小红书</li>
+                <li><strong>游戏社群：</strong>QQ 群、微信群、贴吧软性植入</li>
+                <li><strong>直播引流：</strong>抖音直播打三角洲，主页挂小红书号</li>
+            </ul>
+            
+            <h4 style="color: var(--primary); margin: 15px 0 10px;">私域沉淀</h4>
+            <ul>
+                <li><strong>引流路径：</strong>笔记→私信→微信→成交</li>
+                <li><strong>微信人设：</strong>"护航顾问"，朋友圈发战报 + 客户反馈</li>
+            </ul>
+        </div>
+        
+        <!-- 风险控制 -->
+        <div class="section">
+            <h3>⚠️ 风险控制（小红书平台规则）</h3>
+            
+            <div class="warning">
+                <strong>🚫 敏感词规避</strong>
+                <ul style="margin-top: 10px;">
+                    <li>避免："代练"、"代打"、"guaranteed 上分"</li>
+                    <li>使用："护航"、"陪玩"、"指导"、"教学"</li>
+                    <li>微信 → V/X/绿泡泡/主页</li>
+                    <li>价格 → 看图表/私/图片展示</li>
+                    <li>赚钱 → 米/收益/收入</li>
+                </ul>
+            </div>
+            
+            <div class="warning">
+                <strong>🔴 内容红线</strong>
+                <ul style="margin-top: 10px;">
+                    <li>不展示账号密码交易</li>
+                    <li>不承诺 100% 上分</li>
+                    <li>不发布虚假战报</li>
+                    <li>不涉及未成年人服务</li>
+                </ul>
+            </div>
+            
+            <div class="warning">
+                <strong>🛡️ 引流风控</strong>
+                <ul style="margin-top: 10px;">
+                    <li>私信不直接发微信号，用"看主页"、"点头像"引导</li>
+                    <li>微信用谐音/图片形式传递</li>
+                    <li>准备 2-3 个备用号防封</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- 执行时间表 -->
+        <div class="section">
+            <h3>📅 执行时间表</h3>
+            <table>
+                <tr>
+                    <th>阶段</th>
+                    <th>时间</th>
+                    <th>目标</th>
+                </tr>
+                <tr>
+                    <td>起号期</td>
+                    <td>第 1-2 周</td>
+                    <td>发布 14 篇笔记，破 500 粉</td>
+                </tr>
+                <tr>
+                    <td>增长期</td>
+                    <td>第 3-4 周</td>
+                    <td>日均私信 10+，转化 3-5 单</td>
+                </tr>
+                <tr>
+                    <td>稳定期</td>
+                    <td>第 2 月起</td>
+                    <td>月营收 1-3 万，复购率 30%+</td>
+                </tr>
+            </table>
+        </div>
+        
+        <!-- 标签推荐 -->
+        <div class="section">
+            <h3>🏷️ 推荐标签组合</h3>
+            <pre style="text-align: center; font-size: 1.1em;">#三角洲行动 #护航 #陪玩 #上分 #游戏日常 #FPS #俱乐部 #创业</pre>
+            <p style="text-align: center; color: var(--muted); margin-top: 10px;">每篇笔记使用 5-8 个标签</p>
+        </div>
+        
+        <!-- 底部 -->
+        <div class="footer">
+            <div class="logo" style="font-size: 1.5em;">🎮 三角洲护航俱乐部</div>
+            <div class="footer-info">
+                本方案由 AI 助理生成 | 任务编号：JJC-20260409-001
+            </div>
+            <div class="footer-info">
+                制定部门：中书省 | 审议状态：待批准执行
+            </div>
+            <div class="tagline" style="margin-top: 20px;">专业护航 · 安心上分</div>
+        </div>
+    </div>
+    
+    <script>
+        // 简单的加载动画
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('三角洲护航俱乐部方案页面已加载');
+        });
+    </script>
+</body>
+</html>
